@@ -2,6 +2,7 @@ package com.pluralsight;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.rmi.ServerException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Connection;
@@ -59,6 +60,9 @@ public class ControllerServlet extends HttpServlet {
 				case "/insert":
 					insertBook(request, response);
           break;
+				case "/delete":
+					deleteBook(request, response);
+          break;
         default:
 				   listBooks(request, response);
            break;
@@ -67,6 +71,13 @@ public class ControllerServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private void deleteBook(HttpServletRequest request, HttpServletResponse response)
+		throws ServerException, IOException{
+		int id = Integer.parseInt(request.getParameter("id"));
+		bookDAO.deleteBook(id);
+		response.sendRedirect("list");
 	}
 
 	private void showBookAdmin(HttpServletRequest request, HttpServletResponse response)
