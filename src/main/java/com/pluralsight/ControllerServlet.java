@@ -66,6 +66,9 @@ public class ControllerServlet extends HttpServlet {
 				case "/edit":
 					showEditForm(request, response);
           break;
+				case "/update":
+					updateBook(request, response);
+          break;
         default:
 				   listBooks(request, response);
            break;
@@ -77,14 +80,14 @@ public class ControllerServlet extends HttpServlet {
 	}
 	
 	private void deleteBook(HttpServletRequest request, HttpServletResponse response)
-		throws ServerException, IOException{
+		throws ServletException, IOException{
 		int id = Integer.parseInt(request.getParameter("id"));
 		bookDAO.deleteBook(id);
 		response.sendRedirect("list");
 	}
 	
 	private void showEditForm(HttpServletRequest request, HttpServletResponse response)
-			throws ServerException, IOException{
+			throws ServletException, IOException{
 		int id = Integer.parseInt(request.getParameter("id"));
 		try {
 			Book bookToSend = bookDAO.getBook(id);
@@ -94,9 +97,17 @@ public class ControllerServlet extends HttpServlet {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
-		
-		
+	}
+	
+	private void updateBook(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException{
+		int id = Integer.parseInt(request.getParameter("id"));
+		String bookTitle = request.getParameter("booktitle");
+		String bookAuthor = request.getParameter("bookauthor");
+		String bookPrice = request.getParameter("bookprice");
+		Book bookToSend = new Book(id, bookTitle, bookAuthor, Float.parseFloat(bookPrice));
+		bookDAO.updateBook(bookToSend);
+		response.sendRedirect("list");
 		
 	}
 
